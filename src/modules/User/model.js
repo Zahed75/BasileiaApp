@@ -3,20 +3,17 @@ const mongoose = require('mongoose');
 
 
 const UserSchema=new mongoose.Schema({
-    userName:{
+    firstName:{
     type:String,
      max:[30,'Please Input Your Name'],
     required:[true,'Must Be required your name']
     },
-
-    profilePic:{
-        type:String,
-    },
-    phoneNumber:{
-        type:String,
-        max:[12,'Please Input Your Number'],
-        required:[true,"Must be input Phone Number"]
-    },
+    lastName:{
+      type:String,
+       max:[30,'Please Input Your Name'],
+      required:[true,'Must Be required your name']
+      },
+  
     email: {
         type: String,
         unique: [true, 'your email must be unique/used already'],
