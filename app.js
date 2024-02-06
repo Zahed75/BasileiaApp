@@ -37,26 +37,17 @@ app.use(cookieParser());
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://v2admin.onnow.io',
-  'https://app.onnow.io',
-  'https://staging-admin.onnow.io',
   'http://localhost:3004',
   'http://localhost:3005',
+  'http://localhost:80',
+  'http://localhost:443',
   '*',
 ];
 const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
     return callback(null, true);
-    // if (process.env.NODE_ENV !== 'production') {
-    //   return callback(null, true);
-    // } else {
-    //   // if (whitelist.includes(origin) || whitelist.includes('*')) {
-    //   // return callback(null, true);
-    //   // } else {
-    //   //   callback(new Error('Not allowed by CORS'));
-    //   // }
-    // }
+   
   },
 };
 

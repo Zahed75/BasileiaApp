@@ -66,10 +66,7 @@ UserSchema.pre('save', async function hashPassword(next) {
   };
   
   //Validations
-  UserSchema.path('phoneNumber').validate(function (value) {
-    const regex = /^\d{13}$/; // regular expression to match 11 digits
-    return regex.test(value);
-  }, 'Must be a valid phone number');
+
   
   const UserModel = mongoose.model('user', UserSchema);
   

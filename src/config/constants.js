@@ -1,0 +1,9 @@
+module.exports = {
+BASIC_USER:'BU',
+CELEBRITY_VIP:'VIP',
+CHRUCH_LEADER:'CL',
+CHRUCH_PAGE:'CP',
+SUPER_ADMIN:'SA',
+
+};
+  
