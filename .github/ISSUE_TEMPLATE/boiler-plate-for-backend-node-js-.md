@@ -1,8 +1,8 @@
 ---
 name: Boiler Plate for Backend(Node.js)
-about: This is for Express.js server template
+about: This is for the Express.js server template
 title: 'Backend BoilerPlate'
-labels: 'Oninon Archiecture'
+labels: 'Oninon Architecture'
 assignees: ''
 
 ---
