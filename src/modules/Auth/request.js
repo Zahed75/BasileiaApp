@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
 const adminSchema = Joi.object().keys({
-  name: Joi.string().required(),
-  password: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
   email: Joi.string().required(),
-  phoneNumber: Joi.string().required(),
+  password: Joi.string().required(),
   role: Joi.string().required(),
-  address: Joi.string().required(),
+  
 });
 
 const adminValidate = (data) => {

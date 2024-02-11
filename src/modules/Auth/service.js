@@ -11,8 +11,12 @@ const {
 const { generateOTP } = require('../../utility/common');
 const { SendEmailUtility } = require('../../utility/email');
 const createToken = require('../../utility/createToken');
+const bcrypt = require('bcryptjs');
+
+
 
 // Admin account register
+
 const registerUser = async (userData) => {
   const { email, password } = userData;
 
@@ -173,6 +177,8 @@ const optVerification = async (data) => {
 
   return user;
 };
+
+
 
 // Resend OTP
 const resendOtp = async (data) => {

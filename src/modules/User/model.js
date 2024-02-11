@@ -38,6 +38,16 @@ const UserSchema=new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      role: {
+        type: String,
+        //  BU -> Basic User
+        // VIP -> CELERITY VIP
+        // CL -> CHRUCH_LEADER
+        // CP -> CHURCH_PAGE
+        //SA -> Super Admin
+        enum: ['BU', 'VIP', 'CL', 'CP','SA'],
+        require: [true, 'Role must be selected'],
+      },
     
       isVerified: {
         type: Boolean,

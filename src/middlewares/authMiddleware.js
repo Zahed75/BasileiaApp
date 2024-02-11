@@ -5,6 +5,8 @@ const { Unauthorized } = require('../utility/errors');
 module.exports = (req, res, next) => {
   let Token = req.headers['authorization']?.split(' ')[1];
 
+  console.log("Token Check",Token);
+
   if (!Token) {
     throw new Unauthorized('User not logged in');
   }
@@ -19,3 +21,4 @@ module.exports = (req, res, next) => {
     }
   });
 };
+

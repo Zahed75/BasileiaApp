@@ -1,4 +1,3 @@
-const { SUPER_ADMIN } = require('../config/constants');
 const { Unauthorized } = require('../utility/errors');
 const { BASIC_USER,CELEBRITY_VIP } = require('../config/constants');
 module.exports = (roles) => (req, res, next) => {
