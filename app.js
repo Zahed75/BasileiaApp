@@ -57,6 +57,8 @@ app.use(cors(corsOptions));
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
 app.use(limiter);
 
+app.set('trust proxy', true);
+
 // Mongo DB Database Connection
 connectWithDB();
 
