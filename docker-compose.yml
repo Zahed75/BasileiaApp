@@ -10,8 +10,9 @@ services:
       - "8080:8080"
     environment:
       - NODE_ENV=production
-    env_file:
-      - .env
+      - MONGODB_URI=${MONGODB_URI}
+      - AUTH_SECRET_KEY=${AUTH_SECRET_KEY}
+      - CLIENT_URL=${CLIENT_URL}
     depends_on:
       - basileia_production_mongo
 
