@@ -1,8 +1,20 @@
-FROM node:18
+# Use an official Node.js runtime as the base image
+FROM node:16
 
-# Create app directory
-WORKDIR /app
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-#Expose port and start application
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Expose the port the app runs on
 EXPOSE 8080
-CMD ["npm", "start"]
+
+# Run the Node.js application
+CMD ["node", "index.js"]

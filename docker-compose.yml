@@ -1,39 +1,26 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: akashvorhatara
+
   nodejs_app:
+    build: .
     container_name: nodejs_app
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    environment:
-      - NODE_ENV=production
-      - MONGODB_URI=${MONGODB_URI}
-      - AUTH_SECRET_KEY=${AUTH_SECRET_KEY}
-      - CLIENT_URL=${CLIENT_URL}
     depends_on:
-      - basileia_production_mongo
-
-  basileia_production_mongo:
-    container_name: basileia_production_mongo
-    image: mongo
-    ports:
-      - "27177:27177"  # Map MongoDB port 27177 of the container to host port 27177
+      - mongodb
     environment:
-      - MONGO_INITDB_DATABASE=BasileiaProd
-    env_file:
-      - .env
+      MONGODB_URI: mongodb://root:example@mongodb:27017/your_database_name
 
-  basileia_production_mongo_express:
-    container_name: basileia_production_mongo_express
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      - ME_CONFIG_BASICAUTH_USERNAME=syscoadmin
-      - ME_CONFIG_BASICAUTH_PASSWORD=E7Dw~e5NKh4Ly's
-    depends_on:
-      - basileia_production_mongo
+volumes:
+  mongodb_data:
