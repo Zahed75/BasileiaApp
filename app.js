@@ -51,13 +51,17 @@ const corsOptions = {
   },
 };
 
+
+
 app.use(cors(corsOptions));
 
 // Request Rate Limit
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
-app.use(limiter);
+// const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
+// app.use(limiter);
 
-app.set('trust proxy', true);
+
+
+
 
 // Mongo DB Database Connection
 connectWithDB();
@@ -69,7 +73,7 @@ app.use(handleError);
 
 // Undefined Route Implement
 app.use('*', (req, res) => {
-  res.status(404).json({ status: 'fail', data: 'Just for the 2nd test' });
+  res.status(404).json({ status: 'fail', data: 'Server is Okay,Its Undefined Route' });
 });
 
 module.exports = app;
