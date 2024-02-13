@@ -1,37 +1,27 @@
-version: '3'
-
-networks:
-  basileia-production-network:
-    driver: bridge
+version: '3.8'
 
 services:
-  basileia_production_backend:
-    container_name: basileia_production_backend
-    restart: always
+  nodejs_app:
+    container_name: nodejs_app
     build:
       context: .
       dockerfile: Dockerfile
-    networks:
-      - basileia-production-network
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
     env_file:
       - .env
-    volumes:
-      - .:/app
-    ports:
-      - "127.0.0.1:17001:8080"
     depends_on:
       - basileia_production_mongo
 
   basileia_production_mongo:
     container_name: basileia_production_mongo
-    restart: always
     image: mongo
     ports:
-      - "17002:27017"
-    networks:
-      - basileia-production-network
-    volumes:
-      - /home/basileia_persistent/mongodb:/data/db
+      - "27177:27177"  # Map MongoDB port 27177 of the container to host port 27177
+    environment:
+      - MONGO_INITDB_DATABASE=BasileiaProd
     env_file:
       - .env
 
@@ -40,10 +30,9 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - "127.0.0.1:17003:8081"
-    networks:
-      - basileia-production-network
-    env_file:
-      - .env
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=syscoadmin
+      - ME_CONFIG_BASICAUTH_PASSWORD=E7Dw~e5NKh4Ly's
     depends_on:
       - basileia_production_mongo
