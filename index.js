@@ -1,7 +1,6 @@
 const app = require('./app');
 const server = require('http').createServer(app);
 const socket = require('socket.io');
-const jobs = require('./src/jobs');
 const PORT = process.env.PORT || 8080;
 
 // const client = io('http://localhost:8080');
