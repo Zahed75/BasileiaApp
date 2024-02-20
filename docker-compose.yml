@@ -1,49 +1,23 @@
 version: '3'
 
-networks:
-  basileia-production-network:
-    driver: bridge
-
 services:
-  basileia_production_backend:
-    container_name: basileia_production_backend
-    restart: always
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    networks:
-      - basileia-production-network
-    env_file:
-      - .env
-    volumes:
-      - .:/app
     ports:
-      - "127.0.0.1:17001:8080"
-    depends_on:
-      - basileia_production_mongo
+      - "8080:8080"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      MONGODB_URL: ${MONGODB_URL}
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
+      CLIENT_URL: ${CLIENT_URL}
 
-  basileia_production_mongo:
-    container_name: basileia_production_mongo
-    restart: always
+  mongodb:
     image: mongo
     ports:
-      - "17002:27017"
-    networks:
-      - basileia-production-network
-    volumes:
-      - /home/basileia_persistent/mongodb:/data/db
-    env_file:
-      - .env
-
-  basileia_production_mongo_express:
-    container_name: basileia_production_mongo_express
-    image: mongo-express
-    restart: always
-    ports:
-      - "127.0.0.1:17003:8081"
-    networks:
-      - basileia-production-network
-    env_file:
-      - .env
-    depends_on:
-      - basileia_production_mongo
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
