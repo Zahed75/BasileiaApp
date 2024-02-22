@@ -1,49 +1,19 @@
-version: '3'
-
-networks:
-  basileia-production-network:
-    driver: bridge
-
+version: "3"
 services:
-  basileia_production_backend:
-    container_name: basileia_production_backend
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    networks:
-      - basileia-production-network
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    ports:
-      - "127.0.0.1:17007:8080"
-    depends_on:
-      - basileia_production_mongo
+       login-app:
+           container_name: basileia-app
+           image: latest123/basileia-app
+           restart: always
+           build: .
+           ports:
+             - "8080:8080"
+           links:
+             - mongo
+       mongo:
+             container_name: mongo
+             image: mongo
+             volumes:
+               - ./data:/data/db
+             ports:
+               - '27017:27017'
 
-  basileia_production_mongo:
-    container_name: basileia_production_mongo
-    restart: always
-    image: mongo
-    ports:
-      - "17008:27017"
-    networks:
-      - basileia-production-network
-    volumes:
-      - /home/basileia_persistent/mongodb:/data/db
-    env_file:
-      - .env
-
-  basileia_production_mongo_express:
-    container_name: basileia_production_mongo_express
-    image: mongo-express
-    restart: always
-    ports:
-      - "127.0.0.1:17009:8081"
-    networks:
-      - basileia-production-network
-    env_file:
-      - .env
-    depends_on:
-      - basileia_production_mongo
