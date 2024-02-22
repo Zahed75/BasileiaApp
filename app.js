@@ -18,7 +18,7 @@ const { handleError } = require('./src/utility/errors.js');
 const app = new express();
 
 // Set trust proxy to true
-app.set('trust proxy', true);
+app.set('trust proxy', '127.0.0.1','103.191.51.223');
 
 
 // Security Middleware Implement
