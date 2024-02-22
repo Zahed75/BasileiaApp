@@ -61,10 +61,25 @@ const corsOptions = {
   },
 };
 
+
+
 app.use(cors(corsOptions));
 
 // Request Rate Limit
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
+// const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
+
+//Limiter
+
+const limiter = rateLimit({
+	validate: {
+		validationsConfig: false,
+		// ...
+		default: true,
+	},
+	// ...
+})
+
+
 app.use(limiter);
 
 // Mongo DB Database Connection
