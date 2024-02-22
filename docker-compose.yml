@@ -1,18 +1,18 @@
 version: '3'
 
 networks:
-  onnow-production-network:
+  basileia-production-network:
     driver: bridge
 
 services:
-  onnow_production_backend:
-    container_name: onnow_production_backend
+  basileia_production_backend:
+    container_name: basileia_production_backend
     restart: always
     build:
       context: .
       dockerfile: Dockerfile
     networks:
-      - onnow-production-network
+      - basileia-production-network
     env_file:
       - .env
     volumes:
@@ -20,30 +20,30 @@ services:
     ports:
       - "127.0.0.1:17001:8080"
     depends_on:
-      - onnow_production_mongo
+      - basileia_production_mongo
 
-  onnow_production_mongo:
-    container_name: onnow_production_mongo
+  basileia_production_mongo:
+    container_name: basileia_production_mongo
     restart: always
     image: mongo
     ports:
       - "17002:27017"
     networks:
-      - onnow-production-network
+      - basileia-production-network
     volumes:
-      - /home/onnow_persistent/mongodb:/data/db
+      - /home/basileia_persistent/mongodb:/data/db
     env_file:
       - .env
 
-  onnow_production_mongo_express:
-    container_name: onnow_production_mongo_express
+  basileia_production_mongo_express:
+    container_name: basileia_production_mongo_express
     image: mongo-express
     restart: always
     ports:
       - "127.0.0.1:17003:8081"
     networks:
-      - onnow-production-network
+      - basileia-production-network
     env_file:
       - .env
     depends_on:
-      - onnow_production_mongo
+      - basileia_production_mongo
