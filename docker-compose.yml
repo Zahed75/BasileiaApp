@@ -1,6 +1,6 @@
 version: "3"
 services:
-       login-app:
+       basileia-app:
            container_name: basileia-app
            image: latest123/basileia-app
            restart: always
@@ -16,4 +16,5 @@ services:
                - ./data:/data/db
              ports:
                - '27017:27017'
+
 
