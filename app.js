@@ -74,7 +74,7 @@ const limiter = rateLimit({
 	validate: {
 		validationsConfig: false,
 		// ...
-		default: true,
+		default: false,
 	},
 	// ...
 })
