@@ -17,6 +17,10 @@ const { handleError } = require('./src/utility/errors.js');
 
 const app = new express();
 
+// Set trust proxy to true
+app.set('trust proxy', true);
+
+
 // Security Middleware Implement
 app.use(helmet());
 app.use(mongoSanitize());
