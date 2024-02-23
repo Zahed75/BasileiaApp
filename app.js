@@ -71,12 +71,13 @@ app.use(cors(corsOptions));
 //Limiter
 
 const limiter = rateLimit({
-	validate: {
-		validationsConfig: false,
-		// ...
-		default: false,
-	},
 	// ...
+	handler: (request, response, next, options) => {
+		if (request.rateLimit.current === request.rateLimit.limit + 1) {
+			// onLimitReached code here
+		}
+		response.status(options.statusCode).send(options.message)
+	},
 })
 
 
