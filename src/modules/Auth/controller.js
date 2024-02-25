@@ -88,6 +88,9 @@ const logoutHandler = async (req, res, next) => {
   }
 };
 
+
+// Verify OTP
+
 const verifyOTP = async (req, res, next) => {
   try {
     await authService.optVerification(req.body);

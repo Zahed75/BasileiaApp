@@ -2,7 +2,7 @@ version: "3"
 services:
        basi-app:
            container_name: basileia-app
-           image: latest/application
+           image: backend/application
            restart: always
            build: .
            ports:
