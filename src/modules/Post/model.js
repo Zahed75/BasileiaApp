@@ -2,11 +2,14 @@ const mongoose = require('mongoose');
 
 const UploadSchema=new mongoose.Schema(
     {
-        userId:{
-            type:mongoose.Schema.mongoose.Types.objectId,
-            required: [true, 'Owner Id is required'],
-
-        },
+        user:[
+          {
+            userId:{
+                type:mongoose.Schema.Types.ObjectId,
+                required:true
+            }
+          }
+        ],
         files:{
             type:String,
             required:false,
@@ -24,12 +27,7 @@ const UploadSchema=new mongoose.Schema(
             type:Number,
             default:0
         },
-        followers:{
-            userId:{
-                type:mongoose.Schema.mongoose.Types.object,
-                required: [false, 'User Id is required']
-            }
-        },
+     
 
         
     },{timestamps:true},
@@ -40,4 +38,4 @@ const UploadSchema=new mongoose.Schema(
 
  const FileUpload=mongoose.model('files',UploadSchema);
 
- module.exports=FileUploadModel;
+ module.exports=FileUpload;
