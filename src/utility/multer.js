@@ -1,83 +1,19 @@
-// const multer = require('multer');
-// const path = require('path');
-// const fs = require('fs');
+const multer = require('multer');
+const path = require('path'); // Import the path module
 
-// const brandStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, path.join(__dirname, '../uploads/brands'));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       req.body.brandName.replace(/Img|\+/g, '') +
-//         path.extname(file.originalname)
-//     );
-//   },
-// });
+// Define storage for uploaded files
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        // Set the destination folder for uploaded files
+        cb(null, path.join(__dirname, '../uploads/users'));
+    },
+    filename: (req, file, cb) => {
+        // Set the filename for uploaded files
+        cb(null, file.originalname);
+    }
+});
 
-// const outletManagerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, path.join(__dirname, '../uploads/outlet-manager'));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       req.body.name +
-//         '-' +
-//         file.fieldname.replace('Img', '') +
-//         path.extname(file.originalname)
-//     );
-//   },
-// });
+// Create Multer instance
+const upload = multer({ storage: storage });
 
-// const brandManagerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, path.join(__dirname, '../uploads/brand-manager'));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       req.body.name.replaceAll(' ', '-') +
-//         '-' +
-//         file.fieldname.replace('Img', '') +
-//         path.extname(file.originalname)
-//     );
-//   },
-// });
-
-// const itemStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, path.join(__dirname, '../uploads/items'));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       file.originalname.replace(' ', '-') + path.extname(file.originalname)
-//     );
-//   },
-// });
-
-// const customerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     const customerFilePath = path.join(__dirname, '../uploads/customers');
-//     fs.mkdirSync(customerFilePath, { recursive: true });
-//     cb(null, customerFilePath);
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, req.userid + path.extname(file.originalname));
-//   },
-// });
-
-// const brandUpload = multer({ storage: brandStorage });
-// const outletManagerUpload = multer({ storage: outletManagerStorage });
-// const brandManagerUpload = multer({ storage: brandManagerStorage });
-// const itemImageUpload = multer({ storage: itemStorage });
-// const customerUpload = multer({ storage: customerStorage });
-
-// module.exports = {
-//   brandUpload,
-//   outletManagerUpload,
-//   brandManagerUpload,
-//   itemImageUpload,
-//   customerUpload,
-// };
+module.exports = upload;

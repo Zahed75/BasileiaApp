@@ -51,6 +51,8 @@ const registerUser = async (userData) => {
   return isUser;
 };
 
+
+
 // Sign In User>Brand Manager>
 const signinUser = async (data) => {
   const { email, password } = data;
@@ -102,81 +104,33 @@ const signinUser = async (data) => {
 };
 
 
-//SuperAdmin
 
-const superAdmininUser = async (data) => {
-  const { email, password } = data;
-
-  const isUser = await User.findOne({ email }).select(
-    'name phoneNumber email password isActive isVerified role brands ownerId address'
-  );
-
-  if (!isUser) {
-    throw new BadRequest('Invalid credentials');
-  }
-
-  const isPassword = await isUser.authenticate(password);
-
-  if (!isPassword) {
-    throw new BadRequest('Invalid credentials');
-  }
-
-  if (!isUser.isActive) {
-    throw new BadRequest('User is not active');
-  }
-
-  if (!isUser.isVerified) {
-    throw new BadRequest('User is not verified');
-  }
-
-  const accessToken = createToken(
-    {
-      userId: isUser._id,
-      role: isUser.role,
-    },
-    { expiresIn: '3d' }
-  );
-
-  const refreshToken = createToken(
-    {
-      userId: isUser._id,
-      role: isUser.role,
-    },
-    { expiresIn: '30d' }
-  );
-
-  isUser.refreshToken = refreshToken;
-  await isUser.save();
-  isUser.password = undefined;
-  isUser.refreshToken = undefined;
-
-  return { user: isUser, accessToken, refreshToken };
-};
 
 
 
 
 
 // User OTP Verification
-const optVerification = async (data) => {
-  const { email, otp } = data;
-
-  const user = await User.findOne({
+const otpVerification=async(data)=>{
+  const{email,otp}=data;
+  const user=await User.findOne({
     email,
   });
 
-  if (user.otp !== Number(otp)) {
-    throw new BadRequest('OTP did not match');
+  if (user.otp !==Number(otp)){
+
+   throw new BadRequest("OTP did not match");
   }
 
-  user.isActive = true;
-  user.isVerified = true;
-  user.otp = undefined;
-
+  user.isActive=true;
+  user.isVerified=true;
+  user.otp=undefined;
   await user.save();
 
   return user;
 };
+
+
 
 
 
@@ -194,6 +148,8 @@ const resendOtp = async (data) => {
   return;
 };
 
+
+
 // Expire OTP
 const expireOTP = async (data) => {
   const { email } = data;
@@ -203,6 +159,8 @@ const expireOTP = async (data) => {
   );
   return;
 };
+
+
 
 // User Access Token
 const getAccessToken = async (cookies, clearJWTCookie) => {
@@ -214,6 +172,8 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
   const isUser = await User.findOne({ refreshToken }).exec();
 
 
+
+  
 
   //detected refresh token reuse
   if (!isUser) {
@@ -279,6 +239,9 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
 
 
 
+
+
+
 // Find User By Cookie
 const findUserByCookie = async (cookies) => {
   if (!cookies?.jwt) throw new NoContent();
@@ -301,12 +264,12 @@ const removeRefreshToken = async (token) => {
 module.exports = {
   registerUser,
   signinUser,
-  optVerification,
+  otpVerification,
   resendOtp,
   expireOTP,
   getAccessToken,
   findUserByCookie,
   removeRefreshToken,
-  superAdmininUser
+  
 
 };
