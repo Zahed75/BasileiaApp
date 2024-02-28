@@ -2,10 +2,10 @@ version: '3.9'
 services:
   backend:
     build:
-      context: '.'
+      context: .
       dockerfile: Dockerfile
     ports:
-      - 17001:17001
+      - "17001:17001"
     container_name: basila-server
     networks:
       - basila-network
@@ -13,14 +13,14 @@ services:
       - ./:/app
     environment:
       NODE_ENV: production
-      MONGODB_URI: mongodb://basilaadmin:E7Dw~e5NKh4Ly's@mongo:27017/basilaProd?authSource=admin
+      MONGODB_URI: mongodb://syscoadmin:E7Dw~e5NKh4Ly's@mongo:27017/basilaProd?authSource=admin
     depends_on:
       - mongo
   mongo:
     container_name: basilia-db
     image: mongo
     ports:
-      - 27177:27017
+      - "27177:27017"
     networks:
       - basila-network
     volumes:
@@ -34,7 +34,7 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     networks:
       - basila-network
     environment:
