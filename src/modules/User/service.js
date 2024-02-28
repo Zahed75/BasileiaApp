@@ -160,6 +160,7 @@ const resendResetPasswordEmail = async (managerId) => {
 
 
 
+
 module.exports = {
   addUser,
   updateUser,
@@ -170,5 +171,6 @@ module.exports = {
   verifyChangedEmail,
   updatePassword,
   resendResetPasswordEmail,
+
 
 };

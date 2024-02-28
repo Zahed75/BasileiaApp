@@ -87,7 +87,7 @@ const createVerse = async (req, res, next) => {
     }
 };
 
-
+// Get All Posts handler
 const getAllPostsHandler=async (req, res, next) => {
     const postAll=await PostService.getAllPosts();
     res.status(200).json({
@@ -97,8 +97,14 @@ const getAllPostsHandler=async (req, res, next) => {
 }
 
 
+
+
+
+
+
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
 router.post('/addVerse',createVerse);
 router.get('/postGetAll',getAllPostsHandler);
+
 
 module.exports = router;

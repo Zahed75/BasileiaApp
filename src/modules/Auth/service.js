@@ -263,6 +263,22 @@ const removeRefreshToken = async (token) => {
   return user;
 };
 
+
+
+// getUserInfoById
+
+
+const getUserInfoById = async (userId) => {
+    try {
+        const users = await User.findById(userId);
+        return users;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+
+
 module.exports = {
   registerUser,
   signinUser,
@@ -272,6 +288,7 @@ module.exports = {
   getAccessToken,
   findUserByCookie,
   removeRefreshToken,
+  getUserInfoById
   
 
 };

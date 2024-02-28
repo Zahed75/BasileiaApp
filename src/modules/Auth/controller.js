@@ -143,6 +143,20 @@ const refreshTokenHandler = async (req, res, next) => {
   }
 };
 
+// getUserInfo By UserID
+
+const getUserInfoByIdHandler = async (req, res, next) => {
+  try {
+      const { userId } = req.params;
+      const users = await authService.getUserInfoById(userId);
+      res.status(200).json({ users });
+  } catch (err) {
+      next(err);
+  }
+}
+
+
+
 router.post('/admin/register', handleValidation(adminValidate), userSignup);
 router.post('/user/signin', userSignin);
 router.get('/logout', logoutHandler);
@@ -150,6 +164,8 @@ router.post('/otp/verify', verifyOTP);
 router.post('/otp/resend', resendOTP);
 router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
+
+router.get('/:userId',getUserInfoByIdHandler);
 
 
 module.exports = router;

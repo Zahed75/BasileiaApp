@@ -35,8 +35,20 @@ const getAllPosts=async(query)=>{
 }
 
 
+const getUserInfoById=async(userId)=>{
+    
+    try{
+        const users=await User.find({userId:_id});
+        return users
+    }catch(error){
+        throw new Error(error);
+    }
+}
+
+
 
 module.exports = {
     verseCreate,
-    getAllPosts
+    getAllPosts,
+    
 };
