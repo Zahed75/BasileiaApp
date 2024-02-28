@@ -1,20 +1,28 @@
 version: "3"
 services:
-       basi-app:
-           container_name: basileia-app
-           image: backend/application
-           restart: always
-           build: .
-           ports:
-             - "8080:8080"
-           links:
-             - mongo
-       mongo:
-             container_name: mongo
-             image: mongo
-             volumes:
-               - ./data:/data/db
-             ports:
-               - '27017:27017'
+  basi-app:
+    container_name: basileia-app
+    image: backend/application
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/basileiaApp
+      - AUTH_SECRET_KEY=SecretKey123456789
 
-
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=basiadmin
+      - MONGO_INITDB_ROOT_PASSWORD=E7Dw~e5NKh4Ly's
+      - MONGO_INITDB_DATABASE=basileiaProd
+    command: mongod --bind_ip_all --sslMode requireSSL --sslPEMKeyFile /ssl/mongodb.pem
