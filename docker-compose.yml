@@ -11,7 +11,7 @@ services:
       - mongo
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/basileiaApp
+      - MONGODB_URI=mongodb://103.191.51.223:27017/basileiaApp
       - AUTH_SECRET_KEY=SecretKey123456789
 
   mongo:
