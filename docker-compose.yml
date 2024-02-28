@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "17001:17001"
+      - "8080:8080"
     container_name: basila-server
     networks:
       - basila-network

@@ -7,5 +7,5 @@ RUN npm ci
 # Copy app source code
 COPY . .
 #Expose port and start application
-EXPOSE 17001
+EXPOSE 8080
 CMD [ "npm", "run", "dev" ]
