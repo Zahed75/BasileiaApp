@@ -269,15 +269,14 @@ const removeRefreshToken = async (token) => {
 
 
 const getUserInfoById = async (userId) => {
-    try {
-        const users = await User.findById(userId);
-        return users;
-    } catch (error) {
-        throw new Error(error);
-    }
+  try {
+      const user = await User.findById({ _id: userId });
+      console.log('User:', user); // Add this line for debugging
+      return user;
+  } catch (error) {
+      throw new Error(error);
+  }
 }
-
-
 
 module.exports = {
   registerUser,

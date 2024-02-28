@@ -148,12 +148,13 @@ const refreshTokenHandler = async (req, res, next) => {
 const getUserInfoByIdHandler = async (req, res, next) => {
   try {
       const { userId } = req.params;
-      const users = await authService.getUserInfoById(userId);
-      res.status(200).json({ users });
+      const user = await authService.getUserInfoById(userId);
+      res.status(200).json({ user }); // Send user object including profilePicture
   } catch (err) {
-      next(err);
+      next(err, req, res);
   }
 }
+
 
 
 
@@ -164,7 +165,6 @@ router.post('/otp/verify', verifyOTP);
 router.post('/otp/resend', resendOTP);
 router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
-
 router.get('/:userId',getUserInfoByIdHandler);
 
 
