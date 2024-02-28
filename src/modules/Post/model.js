@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
+
 const UploadSchema = new mongoose.Schema({
-    user: [{
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true
-        }
-    }],
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    
     files: {
         type: String,
         required: true,
@@ -22,6 +22,11 @@ const UploadSchema = new mongoose.Schema({
     shares: {
         type: Number,
         default: 0
+    },
+    verse:{
+        type:String,
+        max: [500, "Your comments must be at least 500 characters"],
+        required: false
     }
 }, { timestamps: true });
 

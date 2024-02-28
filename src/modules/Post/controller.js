@@ -3,7 +3,7 @@ const router = express.Router();
 
 const PostService=require('./service');
 const User = require('../User/model');
-
+const { ObjectId } = require('mongoose').Types;
 const {
     BASIC_USER,
     CELEBRITY_VIP,
@@ -23,20 +23,66 @@ const fileForge = require('express-fileforge');
 const path = require('path');
 
 const uploadFiles = require('../../utility/multer');
+const mongoose = require('mongoose');
 
-const uploadFile = (req, res) => {
+// const uploadFile = (req, res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).json({ error: 'No file uploaded' });
+//         }
+//         const uploadedFile = req.file;
+//         const fileName = uploadedFile.originalname;
+//         res.json({ message: 'File uploaded successfully', fileName: fileName });
+//     } catch (err) {
+//         next(err,req,res);
+//     }
+// };
+
+
+const uploadFile = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded' });
         }
-        const uploadedFile = req.file;
-        const fileName = uploadedFile.originalname;
-        res.json({ message: 'File uploaded successfully', fileName: fileName });
+
+        // Extract userId from request body
+        const { userId } = req.body;
+
+        // Validate userId (you can skip this if userId is always valid)
+        if (!mongoose.isValidObjectId(userId)) {
+            return res.status(400).json({ error: 'Invalid userId' });
+        }
+
+        // Get the filename of the uploaded file
+        const fileName = req.file.filename;
+
+        // Check if userId is provided
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Create a new file entry in the database
+        const newFile = new fileModel({
+            userId: new mongoose.Types.ObjectId(userId), // Instantiate ObjectId with new
+            files: fileName,
+            // You can add other fields as needed
+        });
+
+        // Save the file entry to the database
+        await newFile.save();
+
+        res.json({ message: 'File uploaded successfully', file: newFile });
     } catch (error) {
         console.error('Error saving file:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+
+
+
+
+
 
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
 
