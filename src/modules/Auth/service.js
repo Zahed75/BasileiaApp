@@ -165,12 +165,14 @@ const expireOTP = async (data) => {
 // User Access Token
 
 const getAccessToken = async (cookies, clearJWTCookie) => {
-  if (!cookies || !cookies.jwt) throw new Unauthorized('User not authorized');
+  if (!cookies && !cookies.jwt) throw new Unauthorized('User not authorized');
   const refreshToken = cookies.jwt;
 
   clearJWTCookie;
 
   const isUser = await User.findOne({ refreshToken }).exec();
+
+
 
   //detected refresh token reuse
   if (!isUser) {
@@ -188,9 +190,9 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
     throw new Forbidden('User access forbidden');
   }
 
-  const newRefreshTokenArray = isUser ? isUser.refreshToken.filter(
+  const newRefreshTokenArray = isUser?.refreshToken.filter(
     (rt) => rt !== refreshToken
-  ) : [];
+  );
 
   let accessToken;
   let newRefreshToken;
@@ -200,12 +202,10 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
     process.env.AUTH_SECRET_KEY,
     async (err, decoded) => {
       if (err) {
-        if (isUser) {
-          isUser.refreshToken = [...newRefreshTokenArray];
-          await isUser.save();
-        }
+        isUser.refreshToken = [...newRefreshTokenArray];
+        await isUser.save();
       }
-      if (err || (isUser && JSON.parse(JSON.stringify(isUser._id)) !== decoded.userId)) {
+      if (err || JSON.parse(JSON.stringify(isUser?._id)) !== decoded.userId) {
         throw new Forbidden('User access forbidden');
       }
       accessToken = createToken(
@@ -234,6 +234,8 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
 
   return { accessToken, refreshToken: newRefreshToken };
 };
+
+
 
 
 
