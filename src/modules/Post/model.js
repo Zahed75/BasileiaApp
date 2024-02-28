@@ -9,8 +9,9 @@ const UploadSchema = new mongoose.Schema({
     
     files: {
         type: String,
-        required: true,
+        required: false,
     },
+
     like: {
         type: Number,
         default: 0

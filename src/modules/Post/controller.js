@@ -25,18 +25,7 @@ const path = require('path');
 const uploadFiles = require('../../utility/multer');
 const mongoose = require('mongoose');
 
-// const uploadFile = (req, res) => {
-//     try {
-//         if (!req.file) {
-//             return res.status(400).json({ error: 'No file uploaded' });
-//         }
-//         const uploadedFile = req.file;
-//         const fileName = uploadedFile.originalname;
-//         res.json({ message: 'File uploaded successfully', fileName: fileName });
-//     } catch (err) {
-//         next(err,req,res);
-//     }
-// };
+
 
 
 const uploadFile = async (req, res) => {
@@ -80,10 +69,36 @@ const uploadFile = async (req, res) => {
 
 
 
+// VerseCreate
 
 
+const createVerse = async (req, res, next) => {
+    try {
+        const userId = req.body.userId; // Assuming the user ID is provided in the request body
+        const verseData = req.body; // Assuming the verse data is provided in the request body
+
+        const verse = await PostService.verseCreate(userId, verseData);
+        res.status(200).json({
+            message: "Verse created successfully",
+            verse
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+const getAllPostsHandler=async (req, res, next) => {
+    const postAll=await PostService.getAllPosts();
+    res.status(200).json({
+        message:"Post Fetched Successfully!",
+        postAll
+    })
+}
 
 
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
+router.post('/addVerse',createVerse);
+router.get('/postGetAll',getAllPostsHandler);
 
 module.exports = router;
