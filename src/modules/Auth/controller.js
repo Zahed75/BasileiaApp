@@ -15,6 +15,7 @@ const authService = require('./service');
 const { adminValidate } = require('./request');
 const roleMiddleware = require('../../middlewares/roleMiddleware');
 const authMiddleware = require('../../middlewares/authMiddleware');
+const { asyncHandler } = require('../../utility/common');
 
 
 
@@ -155,6 +156,29 @@ const getUserInfoByIdHandler = async (req, res, next) => {
   }
 }
 
+//UpdateUserProfileById
+
+
+const updateUserProfileHandler = async (req, res) => {
+  try {
+    const { id } = req.params; // Extracting ID from request params directly
+    console.log(id); 
+    const { body } = req;
+   
+
+    const updatedUser = await authService.updateUserProfileById(id, body);
+
+    res.status(200).json({
+      message: 'User profile updated successfully',
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
 
 
 
@@ -166,6 +190,7 @@ router.post('/otp/resend', resendOTP);
 router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
 router.get('/:userId',getUserInfoByIdHandler);
+router.post('/updateUserProfiler/:id',updateUserProfileHandler);
 
 
 module.exports = router;

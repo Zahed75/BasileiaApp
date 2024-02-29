@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const User = require('../User/model');
+const User=require('../User/model');
 
 const {
   BadRequest,
@@ -271,12 +271,27 @@ const removeRefreshToken = async (token) => {
 const getUserInfoById = async (userId) => {
   try {
       const user = await User.findById({ _id: userId });
-      console.log('User:', user); // Add this line for debugging
+ 
       return user;
   } catch (error) {
       throw new Error(error);
   }
 }
+
+// updateUserByID
+
+const updateUserProfileById = async (id, value) => {
+
+  const users=await User.findByIdAndUpdate({ _id: id},value,{
+    new:true
+  });
+  if(!users){
+    throw new BadRequest("User Not Found");
+  };
+  return users
+};
+
+
 
 module.exports = {
   registerUser,
@@ -287,7 +302,8 @@ module.exports = {
   getAccessToken,
   findUserByCookie,
   removeRefreshToken,
-  getUserInfoById
+  getUserInfoById,
+  updateUserProfileById
   
 
 };
