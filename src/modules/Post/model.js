@@ -40,14 +40,12 @@ const UploadSchema = new mongoose.Schema({
         required: false,
     },
 
-    like: {
-        type: Number,
-        default: 0
-    },
-    // comments: {
-    //     type: String,
-    //     max: [500, "Your comments must be at least 500 characters"]
-    // },
+
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Assuming you have a User model
+    }],
+
     shares: {
         type: Number,
         default: 0

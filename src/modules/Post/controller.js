@@ -135,12 +135,49 @@ const addReplyHandler=async(req, res)=>{
 }
 
 
+//LikePost Handler
+
+const likePostHandler = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const uploadId = req.params.uploadId;
+
+        const updatedLikes = await PostService.likePost(uploadId, userId);
+
+        res.status(200).json({ message: 'Post liked successfully', likes: updatedLikes });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+
+//getTotal LikesHandler
+
+const getTotalLikesHandler=async(req, res)=>{
+    {
+        try {
+            const uploadId = req.params.uploadId;
+    
+            const likesCount = await PostService.getTotalLikes(uploadId);
+    
+            res.status(200).json({ likes: likesCount });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+}
+
 
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
 router.post('/addVerse',createVerse);
 router.get('/postGetAll',getAllPostsHandler);
 router.post('/comment/:uploadId',addCommentHandler);
 router.post('/reply/:uploadId/:commentId', addReplyHandler);
+
+router.post('/likePost/:uploadId', likePostHandler);
+
+router.get('/likesTotal/:uploadId', getTotalLikesHandler);
 
 
 module.exports = router; 

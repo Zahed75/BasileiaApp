@@ -83,10 +83,53 @@ const addReply=async(uploadId, commentId, userId, reply)=>{
     
 }
 
+// add Like Post
+
+const likePost = async (uploadId, userId) => {
+    try {
+        const upload = await fileModel.findById(uploadId);
+        if (!upload) {
+            throw new Error('Upload not found');
+        }
+
+        if (upload.likes.includes(userId)) {
+            throw new Error('You have already liked this post');
+        }
+
+        upload.likes.push(userId);
+        await upload.save();
+
+        // Returning updated likes array
+        return upload.likes;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+
+//getTotal Like of a POST
+
+const getTotalLikes=async(uploadId)=>{
+    {
+        try {
+            const upload = await fileModel.findById(uploadId);
+            if (!upload) {
+                throw new Error('Upload not found');
+            }
+    
+            return upload.likes.length;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+}
 
 module.exports = {
     verseCreate,
     getAllPosts,
     addComment,
-    addReply
+    addReply,
+    likePost,
+    getTotalLikes
 };
