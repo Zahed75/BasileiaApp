@@ -98,14 +98,49 @@ const getAllPostsHandler=async (req, res, next) => {
 }
 
 
+//addComment Handler
+
+const addCommentHandler=async(req, res)=>{
+    {
+        try {
+            const { userId, comment } = req.body;
+            const uploadId = req.params.uploadId;
+    
+            const upload = await PostService.addComment(uploadId, userId, comment);
+    
+            res.status(201).json({ message: 'Comment added successfully', upload });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+}
 
 
+// addReply Handler
+
+const addReplyHandler=async(req, res)=>{
+    {
+        try {
+            const { userId, reply } = req.body;
+            const { uploadId, commentId } = req.params;
+    
+            const upload = await PostService.addReply(uploadId, commentId, userId, reply);
+    
+            res.status(201).json({ message: 'Reply added successfully', upload });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+    
+}
 
 
 
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
 router.post('/addVerse',createVerse);
 router.get('/postGetAll',getAllPostsHandler);
+router.post('/comment/:uploadId',addCommentHandler);
+router.post('/reply/:uploadId/:commentId', addReplyHandler);
 
 
-module.exports = router;
+module.exports = router; 

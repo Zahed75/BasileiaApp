@@ -37,9 +37,56 @@ const getAllPosts=async(query)=>{
 
 
 
+// comment any Post With
+
+
+const addComment=async(uploadId, userId, comment)=>{
+    try {
+        const upload = await fileModel.findById(uploadId);
+        if (!upload) {
+            throw new Error('Upload not found');
+        }
+        
+        upload.comments.push({ userId, comment });
+        await upload.save();
+
+        return upload;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+//add Reply to any Post
+
+const addReply=async(uploadId, commentId, userId, reply)=>{
+    {
+        try {
+            const upload = await fileModel.findById(uploadId);
+            if (!upload) {
+                throw new Error('Upload not found');
+            }
+    
+            const comment = upload.comments.find(comment => comment._id == commentId);
+            if (!comment) {
+                throw new Error('Comment not found');
+            }
+    
+            comment.replies.push({ userId, reply });
+            await upload.save();
+    
+            return upload;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+    
+}
+
 
 module.exports = {
     verseCreate,
     getAllPosts,
-    
+    addComment,
+    addReply
 };
