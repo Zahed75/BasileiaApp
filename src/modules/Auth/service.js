@@ -172,9 +172,7 @@ const getAccessToken = async (cookies, clearJWTCookie) => {
 
   const isUser = await User.findOne({ refreshToken }).exec();
 
-
-
-  //detected refresh token reuse
+//detected refresh token reuse
   if (!isUser) {
     jwt.verify(
       refreshToken,
@@ -293,6 +291,17 @@ const updateUserProfileById = async (id, value) => {
 
 
 
+
+//get all Users
+
+
+const getAllUsers=async()=>{
+  const allUsers=User.find();
+  return allUsers;
+}
+
+
+
 module.exports = {
   registerUser,
   signinUser,
@@ -303,7 +312,8 @@ module.exports = {
   findUserByCookie,
   removeRefreshToken,
   getUserInfoById,
-  updateUserProfileById
+  updateUserProfileById,
+  getAllUsers
   
 
 };

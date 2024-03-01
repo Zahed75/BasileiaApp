@@ -179,18 +179,27 @@ const updateUserProfileHandler = async (req, res) => {
 
 
 
+const getAllUsersHandler=async (req, res) => {
+  const allUsers=await authService.getAllUsers();
+  res.status(200).json({
+    message:"Get All Users Fetched successfully",
+    allUsers
+  })
+}
 
 
 
 router.post('/admin/register', handleValidation(adminValidate), userSignup);
 router.post('/user/signin', userSignin);
 router.get('/logout', logoutHandler);
+router.get("/getAllUsers",getAllUsersHandler);
 router.post('/otp/verify', verifyOTP);
 router.post('/otp/resend', resendOTP);
 router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
 router.get('/:userId',getUserInfoByIdHandler);
 router.post('/updateUserProfiler/:id',updateUserProfileHandler);
+
 
 
 module.exports = router;

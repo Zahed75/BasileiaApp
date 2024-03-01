@@ -87,6 +87,7 @@ const createVerse = async (req, res, next) => {
     }
 };
 
+
 // Get All Posts handler
 const getAllPostsHandler=async (req, res, next) => {
     const postAll=await PostService.getAllPosts();

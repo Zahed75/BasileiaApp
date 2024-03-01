@@ -7,6 +7,8 @@ const generateOTP = () => {
     return OTP;
   };
   
+
+  
   const asyncHandler = (func) => (req, res, next) => {
     Promise.resolve(func(req, res, next)).catch(next);
   };
