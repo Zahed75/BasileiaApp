@@ -53,7 +53,7 @@ const UserSchema=new mongoose.Schema({
         enum: ['BU', 'VIP', 'CL', 'CP','SA'],
         require: [true, 'Role must be selected'],
       },
-    
+
       isVerified: {
         type: Boolean,
         default: false,

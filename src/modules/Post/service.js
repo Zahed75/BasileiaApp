@@ -2,7 +2,7 @@ const fileModel=require('../Post/model');
 const multer = require('multer');
 const { BadRequest, NotFound } = require('../../utility/errors');
 const User=require('../User/model');
-
+const mongoose = require('mongoose');
 
 //Verse Create
 
@@ -125,11 +125,114 @@ const getTotalLikes=async(uploadId)=>{
     }
 }
 
+
+
+
+
+
+// Follow User
+const followUser = async (followerId, followingId) => {
+    try {
+      // Update User model
+      const follower = await User.findByIdAndUpdate(followerId, {
+        $addToSet: { following: followingId },
+      }, { new: true }); // Ensures updated document is returned
+  
+      if (!follower) {
+        throw new Error('Follower not found');
+      }
+  
+      await follower.save(); // Explicitly save follower document
+  
+      const following = await User.findByIdAndUpdate(followingId, {
+        $addToSet: { followers: followerId },
+      }, { new: true });
+  
+      if (!following) {
+        throw new Error('Following user not found');
+      }
+  
+      await following.save(); // Explicitly save following document
+  
+      // Update Post model (for following user's posts)
+      const followingPosts = await fileModel.updateMany({ userId: followingId }, {
+        $addToSet: { followers: followerId }
+      });
+      if (followingPosts.nModified === 0) {
+        console.warn('No posts found for following user');
+      }
+  
+      // Update Post model (for follower user's posts)
+      const followerPosts = await fileModel.updateMany({ userId: followerId }, {
+        $addToSet: { following: followingId }
+      });
+      if (followerPosts.nModified === 0) {
+        console.warn('No posts found for follower user');
+      }
+  
+      return { message: 'User followed successfully' };
+    } catch (error) {
+      console.error(error);
+      if (error.name === 'MongoError') { // Check for specific database errors
+        throw new Error('Failed to update user data');
+      } else {
+        throw new Error('Failed to create following relationship');
+      }
+    }
+  };
+
+
+
+
+// getTotalFollowers byUserId
+
+const getTotalFollowers = async (postId) => { // Change to postId
+    try {
+        const post = await fileModel.findById(postId); // Fetch the Post document
+        if (!post) {
+            return { totalFollowers: 0 };
+        }
+        const followersCount = post.followers ? post.followers.length : 0;
+
+        console.log("followers",followersCount);
+        return { totalFollowers: followersCount };
+    } catch (error) {
+        // Handle errors
+    }
+};
+
+
+
+//getTotal Following 
+
+const getTotalFollowing=async(userId)=>{
+    {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+    
+            return user.following.length;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+    
+}
+
+
+
+
 module.exports = {
     verseCreate,
     getAllPosts,
     addComment,
     addReply,
     likePost,
-    getTotalLikes
+    getTotalLikes,
+    followUser,
+    getTotalFollowers,
+    getTotalFollowing
+  
 };

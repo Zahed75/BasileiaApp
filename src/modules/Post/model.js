@@ -50,6 +50,15 @@ const UploadSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    following: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+        default: [],
+      },
+      followers: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+        default: [],
+      },
+
     verse:{
         type:String,
         max: [500, "Your comments must be at least 500 characters"],

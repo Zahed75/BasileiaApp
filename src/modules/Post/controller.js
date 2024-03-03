@@ -169,15 +169,75 @@ const getTotalLikesHandler=async(req, res)=>{
 }
 
 
+
+// addFollowers
+
+const followUserHandler = async (req, res) => {
+    try {
+      const { followerId, followingId } = req.body;
+  
+      const result = await PostService.followUser(followerId, followingId);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message }); // Use specific error messages
+    }
+  };
+
+
+
+
+// Total Followers
+
+const getTotalFollowers = async (req, res) => {
+    try {
+        const { postId } = req.params; // Extract postId from request parameters
+
+        const totalFollowers = await PostService.getTotalFollowers(postId);
+
+        res.status(200).json(totalFollowers);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' }); // Generic error for unexpected issues
+    }
+};
+
+
+//Following Users
+
+const getTotalFollowing=async(req, res)=>{
+    {
+        try {
+            const userId = req.params.userId;
+            const totalFollowing = await PostService.getTotalFollowing(userId);
+            res.status(200).json({ totalFollowing });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+}
+
+
+
+
+
+
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
 router.post('/addVerse',createVerse);
 router.get('/postGetAll',getAllPostsHandler);
+
 router.post('/comment/:uploadId',addCommentHandler);
 router.post('/reply/:uploadId/:commentId', addReplyHandler);
 
 router.post('/likePost/:uploadId', likePostHandler);
-
 router.get('/likesTotal/:uploadId', getTotalLikesHandler);
+
+router.post('/follow', followUserHandler);
+
+router.get('/:postId/followers', getTotalFollowers);
+
+router.get('/following/:userId', getTotalFollowing);
+
 
 
 module.exports = router; 
