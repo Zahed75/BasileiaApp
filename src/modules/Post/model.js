@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const ReplySchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref:'User'
     },
     reply: {
         type: String,
@@ -16,7 +17,8 @@ const ReplySchema = new mongoose.Schema({
 const CommentSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref:'User'
     },
     comment: {
         type: String,

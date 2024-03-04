@@ -15,6 +15,8 @@ const bcrypt = require('bcryptjs');
 
 
 
+
+
 // Admin account register
 
 const registerUser = async (userData) => {
@@ -43,6 +45,7 @@ const registerUser = async (userData) => {
       isVerified: newUSer.isVerified,
       isActive: newUSer.isActive,
       role: newUSer.role,
+      profilePicture: newUSer.profilePicture
     };
   }
 
