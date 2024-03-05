@@ -36,7 +36,8 @@ const CommentSchema = new mongoose.Schema({
 const CommunitySchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref:'User'
     },
     question: {
         type: String,

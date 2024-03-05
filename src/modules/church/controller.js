@@ -27,11 +27,23 @@ const addQuestionHandler =asyncHandler(async(req,res)=>{
 })
 
 
+//getAllQuestionByID
 
+
+const getAllQuestionByIdHandler=asyncHandler(async(req,res)=>{
+    const {id}=req.params;
+    const questions=await questionService.getAllQuestionByUser(id);
+    res.status(200).json({
+        message:"Question fetched SuccessFully",
+        questions
+    })
+})
+   
 
 
 
 router.post('/questionAdd',addQuestionHandler);
+router.get('/:id',getAllQuestionByIdHandler)
 
 
 module.exports = router;

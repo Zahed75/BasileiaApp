@@ -15,9 +15,23 @@ const addQuestion=async(questions)=>{
 }
 
 
+// getAllQueationByUserID
+
+// getAllQueationByUserID
+const getAllQuestionByUser = async (id) => {
+    try {
+        const questions = await QuestionModel.find({ userId: id }); // Construct the filter object
+        return questions;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+
 
 module.exports = {
-
     addQuestion,
+   getAllQuestionByUser
   
 };
