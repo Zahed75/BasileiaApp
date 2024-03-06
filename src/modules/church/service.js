@@ -28,10 +28,34 @@ const getAllQuestionByUser = async (id) => {
 }
 
 
+// getLatestQuestion
+
+const getAllLatestQuestions = async (userId = null) => {
+    try {
+      // Construct the query
+      const query = userId ? { userId } : {};
+      console.log(query);
+  
+      // Query the database to get all questions
+      const questions = await QuestionModel.find(query)
+        .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
+        .populate('userId', 'firstName lastName'); // Populate user details if needed
+  
+      return questions;
+    } catch (error) {
+      // Handle errors
+      throw new Error('Error fetching questions: ' + error.message);
+    }
+  };
+  
+
 
 
 module.exports = {
     addQuestion,
-   getAllQuestionByUser
+    getAllQuestionByUser,
+    getAllLatestQuestions
+
+
   
 };

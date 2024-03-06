@@ -40,10 +40,32 @@ const getAllQuestionByIdHandler=asyncHandler(async(req,res)=>{
 })
    
 
+// getLatestQuestion
 
 
+
+const getLatestQuestionsHandler = async (req, res) => {
+    try {
+      // Call the service function to fetch all users' latest questions
+      const latestQuestions = await questionService.getAllLatestQuestions();
+  
+      // Send the response with the fetched questions
+      res.status(200).json({
+        message: 'Fetched all users\' latest questions',
+        latestQuestions
+      });
+    } catch (error) {
+      // Handle errors
+      console.error('Error fetching latest questions:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+
+router.get('/latestQuestion',getLatestQuestionsHandler);
 router.post('/questionAdd',addQuestionHandler);
-router.get('/:id',getAllQuestionByIdHandler)
+router.get('/:id',getAllQuestionByIdHandler);
+
 
 
 module.exports = router;

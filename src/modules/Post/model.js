@@ -45,7 +45,7 @@ const UploadSchema = new mongoose.Schema({
 
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' // Assuming you have a User model
+        ref: 'user' // Assuming you have a User model
     }],
     
     fileUrl: {
