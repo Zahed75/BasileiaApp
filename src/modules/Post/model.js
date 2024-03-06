@@ -47,6 +47,11 @@ const UploadSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User' // Assuming you have a User model
     }],
+    
+    fileUrl: {
+        type: String,
+        required: false,
+    },
 
     shares: {
         type: Number,

@@ -43,6 +43,10 @@ const CommunitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    answer:{
+    type:String,
+    max:[5000,'Answer must be at most 5000 characters']
+    },
    
     categories:{
         type:String,

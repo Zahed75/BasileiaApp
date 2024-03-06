@@ -89,13 +89,31 @@ const createVerse = async (req, res, next) => {
 
 
 // Get All Posts handler
-const getAllPostsHandler=async (req, res, next) => {
-    const postAll=await PostService.getAllPosts();
-    res.status(200).json({
-        message:"Post Fetched Successfully!",
-        postAll
-    })
+// const getAllPostsHandler=async (req, res, next) => {
+//     const postAll=await PostService.getAllPosts();
+//     res.status(200).json({
+//         message:"Post Fetched Successfully!",
+//         postAll
+//     })
+// }
+
+const getAllPostsHandler = async (req, res, next) => {
+    try {
+        const postAll = await PostService.getAllPosts();
+        // Construct file URL for each post
+        postAll.forEach(post => {
+            post.fileUrl = `${process.env.BASE_API_URL}/uploads/${post.files}`;
+        });
+        res.status(200).json({
+            message: "Post Fetched Successfully!",
+            postAll
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
+
 
 
 //addComment Handler
