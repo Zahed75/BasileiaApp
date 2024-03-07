@@ -120,12 +120,40 @@ const replyToCommentHandler = async (req, res) => {
 };
 
 
+//Upvotes
+const upvoteQuestionHandler = async (req, res) => {
+    const { questionId } = req.params;
+    const { userId } = req.body;
+    
+    try {
+        const question = await QuestionModel.findById(questionId);
+        if (!question) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        // Check if the user already upvoted the question
+        if (question.upvotes.includes(userId)) {
+            return res.status(400).json({ message: 'User already upvoted this question' });
+        }
+
+        question.upvotes.push(userId);
+        await question.save();
+
+        res.status(200).json({ message: 'Question upvoted successfully' });
+    } catch (error) {
+        console.error('Error upvoting question:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
 
 router.get('/latestQuestion',getLatestQuestionsHandler);
 router.post('/questionAdd',addQuestionHandler);
 router.get('/:id',getAllQuestionByIdHandler);
 router.post('/:questionId/comments',addCommentHandler);
-router.post('/:questionId/:commentId/replies',replyToCommentHandler)
+router.post('/:questionId/:commentId/replies',replyToCommentHandler);
+router.post('/:questionId/upvote',upvoteQuestionHandler);
 
 
 module.exports = router;
