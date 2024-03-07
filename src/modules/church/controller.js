@@ -17,8 +17,7 @@ const roleMiddleware = require('../../middlewares/roleMiddleware');
 const authMiddleware = require('../../middlewares/authMiddleware');
 const { asyncHandler } = require('../../utility/common');
 const questionService=require('../church/service');
-
-
+const QuestionModel=require('../church/model');
 // AddQuestionHandler
 
 const addQuestionHandler =asyncHandler(async(req,res)=>{
@@ -62,10 +61,71 @@ const getLatestQuestionsHandler = async (req, res) => {
   };
 
 
+// addComments for question
+
+const addCommentHandler = async (req, res) => {
+    const { questionId } = req.params;
+    const { userId, comment } = req.body;
+    
+    try {
+        const question = await QuestionModel.findById(questionId);
+        if (!question) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        const newComment = {
+            userId,
+            comment
+        };
+        question.comments.push(newComment);
+        await question.save();
+
+        res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+// reply Question
+const replyToCommentHandler = async (req, res) => {
+    const { questionId, commentId } = req.params;
+    const { userId, reply } = req.body;
+    
+    try {
+        const question = await QuestionModel.findById(questionId);
+        if (!question) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        const comment = question.comments.id(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        const newReply = {
+            userId,
+            reply
+        };
+        comment.replies.push(newReply);
+        await question.save();
+
+        res.status(201).json({ message: 'Reply added successfully', reply: newReply });
+    } catch (error) {
+        console.error('Error adding reply:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
 router.get('/latestQuestion',getLatestQuestionsHandler);
 router.post('/questionAdd',addQuestionHandler);
 router.get('/:id',getAllQuestionByIdHandler);
-
+router.post('/:questionId/comments',addCommentHandler);
+router.post('/:questionId/:commentId/replies',replyToCommentHandler)
 
 
 module.exports = router;
