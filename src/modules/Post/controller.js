@@ -19,53 +19,54 @@ const roleMiddleware = require('../../middlewares/roleMiddleware');
 const authMiddleware = require('../../middlewares/authMiddleware');
 
 const fileModel=require('../Post/model');
-const fileForge = require('express-fileforge');
 const path = require('path');
-
 const uploadFiles = require('../../utility/multer');
 const mongoose = require('mongoose');
+const cloudinary = require('cloudinary').v2;
 
-
+cloudinary.config({
+    cloud_name: 'dwzlfxeql',
+    api_key: '621875578247182',
+    api_secret: 'VeeYl4sB0juqE4Rp9VZmuVY1L_c'
+  });
 
 
 const uploadFile = async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: 'No file uploaded' });
-        }
-
-        // Extract userId from request body
-        const { userId } = req.body;
-
-        // Validate userId (you can skip this if userId is always valid)
-        if (!mongoose.isValidObjectId(userId)) {
-            return res.status(400).json({ error: 'Invalid userId' });
-        }
-
-        // Get the filename of the uploaded file
-        const fileName = req.file.filename;
-
-        // Check if userId is provided
-        if (!userId) {
-            return res.status(400).json({ error: 'userId is required' });
-        }
-
-        // Create a new file entry in the database
-        const newFile = new fileModel({
-            userId: new mongoose.Types.ObjectId(userId), // Instantiate ObjectId with new
-            files: fileName,
-            // You can add other fields as needed
-        });
-
-        // Save the file entry to the database
-        await newFile.save();
-
-        res.json({ message: 'File uploaded successfully', file: newFile });
-    } catch (error) {
-        console.error('Error saving file:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
+
+    // Extract userId from request body
+    const { userId } = req.body;
+
+    // Validate userId (you can skip this if userId is always valid)
+    if (!mongoose.isValidObjectId(userId)) {
+      return res.status(400).json({ error: 'Invalid userId' });
+    }
+
+    // Upload file to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: 'auto' // 'auto' detects the file type
+    });
+
+    // Create a new file entry in the database with Cloudinary URL
+    const newFile = new fileModel({
+      userId: new mongoose.Types.ObjectId(userId),
+      fileUrl: result.secure_url, // Cloudinary URL
+      // You can add other fields as needed
+    });
+
+    // Save the file entry to the database
+    await newFile.save();
+
+    res.json({ message: 'File uploaded successfully', file: newFile });
+  } catch (error) {
+    console.error('Error saving file:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
+
 
 
 
@@ -88,21 +89,15 @@ const createVerse = async (req, res, next) => {
 };
 
 
-// Get All Posts handler
-// const getAllPostsHandler=async (req, res, next) => {
-//     const postAll=await PostService.getAllPosts();
-//     res.status(200).json({
-//         message:"Post Fetched Successfully!",
-//         postAll
-//     })
-// }
 
 const getAllPostsHandler = async (req, res, next) => {
     try {
         const postAll = await PostService.getAllPosts();
         // Construct file URL for each post
         postAll.forEach(post => {
-            post.fileUrl = `${process.env.BASE_API_URL}/uploads/users/${post.files}`;
+            if (post.files) {
+                post.fileUrl = `${process.env.BASE_API_URL}/uploads/users/${post.files}`;
+            }
         });
         res.status(200).json({
             message: "Post Fetched Successfully!",
@@ -113,7 +108,6 @@ const getAllPostsHandler = async (req, res, next) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
 
 
 //addComment Handler

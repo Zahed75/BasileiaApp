@@ -29,11 +29,10 @@ const verseCreate = async (userId, data) => {
 
 // Get all Post all users
 
-const getAllPosts=async(query)=>{
-    const allPosts=await fileModel.find().sort({votes:1,_id:1})
+const getAllPosts = async (query) => {
+    const allPosts = await fileModel.find().sort({ votes: 1, _id: 1 });
     return allPosts;
 }
-
 
 
 
