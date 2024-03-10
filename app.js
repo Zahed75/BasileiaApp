@@ -61,24 +61,11 @@ const corsOptions = {
   },
 };
 
-
-
 app.use(cors(corsOptions));
 
 // Request Rate Limit
-// const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
-
-//Limiter
-
-const limiter = rateLimit({
-	// ...
-	handler: (request, response, next, options) => {
-		if (request.rateLimit.current === request.rateLimit.limit + 1) {
-			// onLimitReached code here
-		}
-		response.status(options.statusCode).send(options.message)
-	},
-})
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
+app.use(limiter);
 
 
 app.use(limiter);

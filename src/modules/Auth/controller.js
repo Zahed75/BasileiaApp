@@ -179,12 +179,18 @@ const updateUserProfileHandler = async (req, res) => {
 
 
 
-const getAllUsersHandler=async (req, res) => {
-  const allUsers=await authService.getAllUsers();
-  res.status(200).json({
-    message:"Get All Users Fetched successfully",
-    allUsers
-  })
+// GetAllUsers
+const getAllUsersHandler = async (req, res) => {
+  try {
+    const allUsers = await authService.getAllUsers();
+    res.status(200).json({
+      message: "Get All Users Fetched successfully",
+      allUsers
+    });
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 
