@@ -37,7 +37,12 @@ const getAllQuestionByIdHandler=asyncHandler(async(req,res)=>{
         questions
     })
 })
+
+
    
+
+
+
 
 // getLatestQuestion
 

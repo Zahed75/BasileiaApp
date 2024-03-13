@@ -15,7 +15,7 @@ const addQuestion=async(questions)=>{
 }
 
 
-// getAllQueationByUserID
+
 
 // getAllQueationByUserID
 const getAllQuestionByUser = async (id) => {
