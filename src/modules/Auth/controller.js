@@ -184,6 +184,7 @@ const updateUserProfileHandler = async (req, res, next) => {
 
 
 
+
 // GetAllUsers
 const getAllUsersHandler = async (req, res) => {
   try {
@@ -199,6 +200,19 @@ const getAllUsersHandler = async (req, res) => {
 }
 
 
+// delete UserController
+
+const deleteUserHandler=asyncHandler(async (req, res, next) => {
+
+  const {id}=req.params;
+  const Users=await authService.deleteUser(id,req.body);
+  res.status(200).json({
+    message:"Delete User Successfully",
+    Users
+  })
+})
+
+
 
 router.post('/admin/register', handleValidation(adminValidate), userSignup);
 router.post('/user/signin', userSignin);
@@ -210,7 +224,6 @@ router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
 router.get('/:userId',getUserInfoByIdHandler);
 router.post('/updateUserProfiler/:userId',updateUserProfileHandler);
-
-
+router.delete('/:id',deleteUserHandler);
 
 module.exports = router;

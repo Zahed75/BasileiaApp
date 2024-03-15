@@ -326,6 +326,18 @@ const getAllUsers = async () => {
 }
 
 
+
+
+// delete User
+
+const deleteUser=async (id) => {
+  const users=User.findByIdAndDelete({_id:id});
+  if(!users){
+    throw new BadRequest("Can't Delete User")
+  }
+  return users;
+}
+
 module.exports = {
   registerUser,
   signinUser,
@@ -337,7 +349,8 @@ module.exports = {
   removeRefreshToken,
   getUserInfoById,
   updateUserProfileById,
-  getAllUsers
+  getAllUsers,
+  deleteUser
   
 
 };
