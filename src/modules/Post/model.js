@@ -65,11 +65,15 @@ const UploadSchema = new mongoose.Schema({
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         default: [],
       },
-
+   
     verse:{
         type:String,
         max: [500, "Your comments must be at least 500 characters"],
         required: false
+    },
+    caption: {
+        type: String,
+        required: true // Modify this as per your requirement
     },
     comments: [CommentSchema]
 

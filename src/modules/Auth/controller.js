@@ -150,7 +150,7 @@ const getUserInfoByIdHandler = async (req, res, next) => {
   try {
       const { userId } = req.params;
       const user = await authService.getUserInfoById(userId);
-      res.status(200).json({ user }); // Send user object including profilePicture
+      res.status(200).json({ user });
   } catch (err) {
       next(err, req, res);
   }
@@ -159,23 +159,28 @@ const getUserInfoByIdHandler = async (req, res, next) => {
 //UpdateUserProfileById
 
 
-const updateUserProfileHandler = async (req, res) => {
+const updateUserProfileHandler = async (req, res, next) => {
   try {
-    const { id } = req.params; // Extracting ID from request params directly
-    console.log(id); 
-    const { body } = req;
-   
-
-    const updatedUser = await authService.updateUserProfileById(id, body);
-
-    res.status(200).json({
-      message: 'User profile updated successfully',
-      user: updatedUser,
-    });
+    const { userId } = req.params;
+    const updates = req.body; // Assuming updates are sent in the request body
+    const profilePicture = req.file ? req.file.path : null; // Assuming the profile picture is uploaded as a file
+    
+    const updatedUser = await authService.updateUserProfileById (userId, updates, profilePicture);
+    
+    // Check if the user was updated successfully
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    res.status(200).json({ user: updatedUser });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    // Pass the error to the error handling middleware
+    next(error);
   }
 };
+
+
+
 
 
 
@@ -204,7 +209,7 @@ router.post('/otp/resend', resendOTP);
 router.post('/otp/expire', expireOTP);
 router.get('/refresh', refreshTokenHandler);
 router.get('/:userId',getUserInfoByIdHandler);
-router.post('/updateUserProfiler/:id',updateUserProfileHandler);
+router.post('/updateUserProfiler/:userId',updateUserProfileHandler);
 
 
 

@@ -31,43 +31,41 @@ cloudinary.config({
   });
 
 
-const uploadFile = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+  const uploadFile = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        // Extract userId and caption from request body
+        const { userId, caption } = req.body;
+
+        // Validate userId (you can skip this if userId is always valid)
+        if (!mongoose.isValidObjectId(userId)) {
+            return res.status(400).json({ error: 'Invalid userId' });
+        }
+
+        // Upload file to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            resource_type: 'auto' // 'auto' detects the file type
+        });
+
+        // Create a new file entry in the database with Cloudinary URL
+        const newFile = new fileModel({
+            userId: new mongoose.Types.ObjectId(userId),
+            fileUrl: result.secure_url, // Cloudinary URL
+            caption: caption // Set the caption
+        });
+
+        // Save the file entry to the database
+        await newFile.save();
+
+        res.json({ message: 'File uploaded successfully', file: newFile });
+    } catch (error) {
+        console.error('Error saving file:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    // Extract userId from request body
-    const { userId } = req.body;
-
-    // Validate userId (you can skip this if userId is always valid)
-    if (!mongoose.isValidObjectId(userId)) {
-      return res.status(400).json({ error: 'Invalid userId' });
-    }
-
-    // Upload file to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'auto' // 'auto' detects the file type
-    });
-
-    // Create a new file entry in the database with Cloudinary URL
-    const newFile = new fileModel({
-      userId: new mongoose.Types.ObjectId(userId),
-      fileUrl: result.secure_url, // Cloudinary URL
-      // You can add other fields as needed
-    });
-
-    // Save the file entry to the database
-    await newFile.save();
-
-    res.json({ message: 'File uploaded successfully', file: newFile });
-  } catch (error) {
-    console.error('Error saving file:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
 };
-
-
 
 
 // VerseCreate

@@ -12,7 +12,7 @@ const { generateOTP } = require('../../utility/common');
 const { SendEmailUtility } = require('../../utility/email');
 const createToken = require('../../utility/createToken');
 const bcrypt = require('bcryptjs');
-
+const cloudinary = require('cloudinary').v2;
 
 
 
@@ -279,17 +279,37 @@ const getUserInfoById = async (userId) => {
   }
 }
 
+cloudinary.config({
+  cloud_name: 'dwzlfxeql',
+  api_key: '621875578247182',
+  api_secret: 'VeeYl4sB0juqE4Rp9VZmuVY1L_c'
+});
+
+
 // updateUserByID
 
-const updateUserProfileById = async (id, value) => {
+const updateUserProfileById = async (userId, updates, profilePicture) => {
+  try {
+    // If there's a new profile picture, upload it to Cloudinary
+    if (profilePicture) {
+      console.log("Uploading profile picture to Cloudinary...");
+      const uploadedImage = await cloudinary.uploader.upload(profilePicture);
+      console.log("Uploaded image details:", uploadedImage);
+      updates.profilePicture = uploadedImage.secure_url;
+    }
+    
+    // Update the user document with the new profile picture
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
 
-  const users=await User.findByIdAndUpdate({ _id: id},value,{
-    new:true
-  });
-  if(!users){
-    throw new BadRequest("User Not Found");
-  };
-  return users
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw new Error("Failed to update user profile");
+  }
 };
 
 
