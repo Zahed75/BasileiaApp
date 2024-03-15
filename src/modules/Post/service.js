@@ -36,6 +36,20 @@ const getAllPosts = async (query) => {
 
 
 
+// getAllPostBy User ID
+
+
+const getAllPostsByUserId= async(userId)=>{
+    try {
+        const posts = await fileModel.find({ userId }).populate('caption.userId','files.userId'); // Assuming 'username' is the field you want to populate from the 'User' model
+        return posts;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 // comment any Post With
 
 
@@ -222,6 +236,28 @@ const getTotalFollowing=async(userId)=>{
 
 
 
+// getTotalPostCound
+
+const getTotalPostsByUserId=async(userId)=>{
+    try {
+        const totalPosts = await fileModel.countDocuments({ userId });
+        return totalPosts;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+// getTotalFollowers
+
+const getAllFollowersByUserId=async(userId)=>{
+    try {
+        const user = await User.findById(userId).populate('followers', 'username'); // Assuming 'followers' is the field in the User model containing follower IDs
+        return user.followers;
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     verseCreate,
@@ -232,6 +268,9 @@ module.exports = {
     getTotalLikes,
     followUser,
     getTotalFollowers,
-    getTotalFollowing
+    getTotalFollowing,
+    getAllPostsByUserId,
+    getTotalPostsByUserId,
+    getAllFollowersByUserId
   
 };

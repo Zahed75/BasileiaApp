@@ -108,6 +108,20 @@ const getAllPostsHandler = async (req, res, next) => {
 }
 
 
+//getALlPostByUserID
+
+const getAllPostsByUserIdHandler = async (req, res) => {
+    try {
+        const { userId } = req.params; // Assuming userId is passed as a URL parameter
+        const posts = await PostService.getAllPostsByUserId(userId);
+        res.json(posts);
+    } catch (error) {
+        console.error('Error getting posts by user ID:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
 //addComment Handler
 
 const addCommentHandler=async(req, res)=>{
@@ -229,6 +243,32 @@ const getTotalFollowing=async(req, res)=>{
 
 
 
+//GetTotalPostByUserId
+
+const getTotalPostsByUserIdHandler = async (req, res) => {
+    try {
+        const { userId } = req.params; // Assuming userId is passed as a URL parameter
+        const totalPosts = await PostService.getTotalPostsByUserId(userId);
+        res.json({ totalPosts });
+    } catch (error) {
+        console.error('Error getting total posts by user ID:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+/// getTotalFollowersCount
+
+const getAllFollowersByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params; // Assuming userId is passed as a URL parameter
+        const followers = await PostService.getAllFollowersByUserId(userId);
+        res.json(followers);
+    } catch (error) {
+        console.error('Error getting followers by user ID:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 
 
@@ -247,6 +287,12 @@ router.post('/follow', followUserHandler);
 router.get('/:postId/followers', getTotalFollowers);
 
 router.get('/following/:userId', getTotalFollowing);
+
+router.get('/:userId',getAllPostsByUserIdHandler);
+
+router.get('/:userId/totalPost',getTotalPostsByUserIdHandler);
+
+router.get('/:userId/followers',getAllFollowersByUserId)
 
 
 
