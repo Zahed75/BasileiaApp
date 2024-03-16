@@ -73,7 +73,6 @@ const UploadSchema = new mongoose.Schema({
     },
     caption: {
         type: String,
-        required: true // Modify this as per your requirement
     },
     comments: [CommentSchema]
 

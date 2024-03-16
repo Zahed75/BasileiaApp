@@ -291,7 +291,6 @@ router.get('/following/:userId', getTotalFollowing);
 router.get('/:userId',getAllPostsByUserIdHandler);
 
 router.get('/:userId/totalPost',getTotalPostsByUserIdHandler);
-
 router.get('/:userId/followers',getAllFollowersByUserId)
 
 
