@@ -18,8 +18,7 @@ const { handleError } = require('./src/utility/errors.js');
 const app = new express();
 
 // Set trust proxy to true
-app.set('trust proxy', '127.0.0.1','103.191.51.223');
-
+app.set('trust proxy', true);
 
 // Security Middleware Implement
 app.use(helmet());
@@ -49,26 +48,10 @@ const corsOptions = {
   credentials: true, // This is important.
   origin: (origin, callback) => {
     return callback(null, true);
-    // if (process.env.NODE_ENV !== 'production') {
-    //   return callback(null, true);
-    // } else {
-    //   // if (whitelist.includes(origin) || whitelist.includes('*')) {
-    //   // return callback(null, true);
-    //   // } else {
-    //   //   callback(new Error('Not allowed by CORS'));
-    //   // }
-    // }
   },
 };
 
 app.use(cors(corsOptions));
-
-// Request Rate Limit
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
-app.use(limiter);
-
-
-app.use(limiter);
 
 // Mongo DB Database Connection
 connectWithDB();
