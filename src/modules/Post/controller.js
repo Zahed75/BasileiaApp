@@ -88,17 +88,23 @@ const createVerse = async (req, res, next) => {
 
 
 
+// getAllPostsController
 const getAllPostsHandler = async (req, res, next) => {
     try {
-        const postAll = await PostService.getAllPosts();
+        const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+        const limit = parseInt(req.query.limit) || 5; // Default to limit 10 if not provided
+
+        const postAll = await PostService.getAllPosts(page, limit);
+
         // Construct file URL for each post
         postAll.forEach(post => {
             if (post.files) {
                 post.fileUrl = `${process.env.BASE_API_URL}/uploads/users/${post.files}`;
             }
         });
+
         res.status(200).json({
-            message: "Post Fetched Successfully!",
+            message: "Posts Fetched Successfully!",
             postAll
         });
     } catch (error) {
@@ -106,7 +112,6 @@ const getAllPostsHandler = async (req, res, next) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
 
 //getALlPostByUserID
 
@@ -269,6 +274,8 @@ const getAllFollowersByUserId = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+
 
 
 

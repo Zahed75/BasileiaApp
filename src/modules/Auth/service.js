@@ -338,6 +338,34 @@ const deleteUser=async (id) => {
   return users;
 }
 
+
+//resetPassoword
+
+
+const resetPassword = async (email, newPassword) => {
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Update user's password
+        user.password = newPassword;
+        await user.save();
+
+        return { message: 'Password updated successfully' };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+module.exports = { resetPassword };
+
+
+
+
+
+
 module.exports = {
   registerUser,
   signinUser,
@@ -350,7 +378,8 @@ module.exports = {
   getUserInfoById,
   updateUserProfileById,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  resetPassword
   
 
 };

@@ -159,6 +159,28 @@ const resendResetPasswordEmail = async (managerId) => {
 
 
 
+// resetPassword
+
+
+const resetPassword = async (email, otp, newPassword) => {
+  try {
+      const user = await UserModel.findOne({ email, otp });
+      if (!user) {
+          throw new Error('Invalid email or OTP');
+      }
+
+      // Update user's password
+      user.password = newPassword;
+      // Clear OTP after successful password reset
+      user.otp = undefined;
+      await user.save();
+
+      return { message: 'Password reset successfully' };
+  } catch (error) {
+      throw new Error(error.message);
+  }
+};
+
 
 
 module.exports = {
@@ -171,6 +193,7 @@ module.exports = {
   verifyChangedEmail,
   updatePassword,
   resendResetPasswordEmail,
+ 
 
 
 

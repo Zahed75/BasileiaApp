@@ -29,10 +29,15 @@ const verseCreate = async (userId, data) => {
 
 // Get all Post all users
 
-const getAllPosts = async (query) => {
-    const allPosts = await fileModel.find().sort({ votes: 1, _id: 1 });
+const getAllPosts = async (page, limit) => {
+    const skip = (page - 1) * limit;
+    const allPosts = await fileModel.find()
+                                    .sort({ votes: 1, _id: 1 })
+                                    .skip(skip)
+                                    .limit(limit);
     return allPosts;
 }
+
 
 
 
@@ -258,6 +263,9 @@ const getAllFollowersByUserId=async(userId)=>{
         throw error;
     }
 }
+
+
+
 
 module.exports = {
     verseCreate,

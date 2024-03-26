@@ -213,6 +213,20 @@ const deleteUserHandler=asyncHandler(async (req, res, next) => {
 })
 
 
+//reset PasswordController
+
+const resetPasswordHandler = async (req, res) => {
+  try {
+      const { email, newPassword } = req.body;
+      const result = await authService.resetPassword(email, newPassword);
+      res.status(200).json(result);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 router.post('/admin/register', handleValidation(adminValidate), userSignup);
 router.post('/user/signin', userSignin);
@@ -225,5 +239,6 @@ router.get('/refresh', refreshTokenHandler);
 router.get('/:userId',getUserInfoByIdHandler);
 router.post('/updateUserProfiler/:userId',updateUserProfileHandler);
 router.delete('/:id',deleteUserHandler);
+router.post('/reset-password', resetPasswordHandler);
 
 module.exports = router;
