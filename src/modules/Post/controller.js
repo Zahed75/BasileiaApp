@@ -277,6 +277,22 @@ const getAllFollowersByUserId = async (req, res) => {
 
 
 
+//SharePost
+const sharePostHandler = async (req, res) => {
+    try {
+        const { postId } = req.params; // Extract postId from request parameters
+        const { userId } = req.body; // Extract userId from request body
+
+        // Call the service function to share the post
+        const sharedPost = await PostService.sharePost(postId, userId);
+
+        res.status(200).json({ message: 'Post shared successfully', sharedPost });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 
 
 router.post('/fileSystem', uploadFiles.single('files'), uploadFile);
@@ -300,6 +316,7 @@ router.get('/:userId',getAllPostsByUserIdHandler);
 router.get('/:userId/totalPost',getTotalPostsByUserIdHandler);
 router.get('/:userId/followers',getAllFollowersByUserId)
 
+router.post('/share/:postId', sharePostHandler);
 
 
 module.exports = router; 

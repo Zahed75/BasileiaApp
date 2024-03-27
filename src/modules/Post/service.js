@@ -265,6 +265,39 @@ const getAllFollowersByUserId=async(userId)=>{
 }
 
 
+//sharePost
+
+const sharePost = async (postId, userId) => {
+    try {
+        // Find the post to be shared
+        const postToShare = await fileModel.findById(postId);
+        if (!postToShare) {
+            throw new Error('Post not found');
+        }
+
+        // Update shares count of the shared post
+        postToShare.shares++;
+
+        // Save the updated post
+        await postToShare.save();
+
+        // Create a new post for the user who shares it
+        const sharedPost = new fileModel({
+            userId: userId,
+            shares: 0, // Initialize shares count for the new post
+            // You might need to copy other fields from the original post if required
+        });
+
+        // Save the new shared post
+        await sharedPost.save();
+
+        return sharedPost;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
 
 
 module.exports = {
@@ -279,6 +312,7 @@ module.exports = {
     getTotalFollowing,
     getAllPostsByUserId,
     getTotalPostsByUserId,
-    getAllFollowersByUserId
+    getAllFollowersByUserId,
+    sharePost
   
 };
