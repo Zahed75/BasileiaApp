@@ -7,16 +7,21 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const session = require('express-session');
-// Import Passport.js configuration
 
 
 
+// Import routes
 const routes = require('./src/routes');
+
+// Database connection (assuming you have a separate file)
 const { connectWithDB } = require('./src/config/mongo');
+
+// Error handling middleware
 const { handleError } = require('./src/utility/errors.js');
 
 const app = new express();
@@ -69,9 +74,12 @@ app.use('*', (req, res) => {
   res.status(404).json({ status: 'fail', data: 'Undefined Route' });
 });
 
+// Start the server
+const server = require('http').createServer(app);
+const PORT = process.env.PORT || 8080;
 
-
-
-
+server.listen(PORT, function () {
+  console.log('Server running on port => ' + PORT);
+});
 
 module.exports = app;

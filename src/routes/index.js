@@ -9,6 +9,7 @@ const authVerifyMiddleware = require('../middlewares/authMiddleware');
 
 //routes
 const authRoute = require('../modules/Auth/controller');
+router.use('/auth', authRoute);
 const userRoute = require('../modules/User/controller');
 const uploadRoute=require('../modules/Post/controller');
 const questionRoute=require('../modules/church/controller');
