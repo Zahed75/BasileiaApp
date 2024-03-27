@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+require('dotenv').config();
 const handleValidation = require('../../middlewares/schemaValidation');
 
 const {
@@ -18,6 +18,8 @@ const authMiddleware = require('../../middlewares/authMiddleware');
 const { asyncHandler } = require('../../utility/common');
 
 
+
+const passport = require("passport")
 
 const userSignup = async (req, res, next) => {
   try {
@@ -148,6 +150,7 @@ const refreshTokenHandler = async (req, res, next) => {
 
 const getUserInfoByIdHandler = async (req, res, next) => {
   try {
+    
       const { userId } = req.params;
       const user = await authService.getUserInfoById(userId);
       res.status(200).json({ user });
@@ -225,6 +228,59 @@ const resetPasswordHandler = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
+const { OAuth2Strategy: GoogleStrategy } = require('passport-google-oauth');
+const User = require('../User/model');
+
+// Google OAuth Configuration
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: 'http://localhost:8080/auth/google/callback'
+},
+async (accessToken, refreshToken, profile, done) => {
+  console.log('Google Profile:', profile); // Log the profile object for debugging
+  try {
+    // Check if the user exists in the database
+    let user = await User.findOne({ email: profile.emails[0].value });
+    
+    // If user does not exist, create a new user
+    if (!user) {
+      user = await User.create({
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
+        email: profile.emails[0].value,
+        // Add any additional fields you want to save
+      });
+    }
+    
+    // Return the user
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+}
+));
+
+// Define your authentication route
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Define the callback route for Google OAuth
+router.get('/auth/google/callback', 
+passport.authenticate('google', { failureRedirect: '/login' }),
+(req, res) => {
+  // Successful authentication, redirect to a different route or send a response
+  res.redirect('/'); // Redirect to the home page after successful authentication
+}
+);
+
+
+
+
+
 
 
 

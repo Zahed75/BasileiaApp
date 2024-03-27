@@ -366,6 +366,7 @@ module.exports = { resetPassword };
 
 
 
+
 module.exports = {
   registerUser,
   signinUser,
@@ -379,7 +380,8 @@ module.exports = {
   updateUserProfileById,
   getAllUsers,
   deleteUser,
-  resetPassword
+  resetPassword,
+
   
 
 };

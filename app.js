@@ -10,6 +10,10 @@ const hpp = require('hpp');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const session = require('express-session');
+// Import Passport.js configuration
+
+
 
 const routes = require('./src/routes');
 const { connectWithDB } = require('./src/config/mongo');
@@ -36,12 +40,12 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
 // CORS CONFIGURATIONS
-
 const whitelist = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:80',
   'http://localhost:40',
+  'http://localhost:8080',
   '*',
 ];
 const corsOptions = {
@@ -50,7 +54,6 @@ const corsOptions = {
     return callback(null, true);
   },
 };
-
 app.use(cors(corsOptions));
 
 // Mongo DB Database Connection
@@ -65,5 +68,10 @@ app.use(handleError);
 app.use('*', (req, res) => {
   res.status(404).json({ status: 'fail', data: 'Undefined Route' });
 });
+
+
+
+
+
 
 module.exports = app;
